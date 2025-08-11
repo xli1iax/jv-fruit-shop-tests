@@ -8,12 +8,19 @@ import core.basesyntax.writer.FileWriterImpl;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class FileWriterTest {
+    private FileWriter fileWriter;
+
+    @BeforeEach
+    public void setUp() {
+        fileWriter = new FileWriterImpl();
+    }
+
     @Test
-    public void writeValidDataFileContainsThatData() throws IOException {
-        FileWriter fileWriter = new FileWriterImpl();
+    public void writeValidDataFileContainsThatData_Ok() throws IOException {
         Path tempFile = Files.createTempFile("testReport", ".txt");
 
         String report = "Apple,10\nBanana,5";
@@ -24,9 +31,7 @@ public class FileWriterTest {
     }
 
     @Test
-    public void writeInvalidPath() {
-        FileWriter fileWriter = new FileWriterImpl();
-
+    public void writeInvalidPath_throwsException() {
         assertThrows(RuntimeException.class,
                 () -> fileWriter.write("Some data", "/invalid-path/does-not-exist/report.txt"));
     }

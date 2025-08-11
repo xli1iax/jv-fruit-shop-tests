@@ -4,20 +4,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import core.basesyntax.model.FruitTransaction;
 import core.basesyntax.storage.FruitShop;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class SupplyOperationTest {
-    private static final OperationHandler operationHandler = new SupplyOperation();
+    private OperationHandler operationHandler;
 
     @BeforeEach
     public void setup() {
-        FruitShop.storage.clear();
+        operationHandler = new SupplyOperation();
         FruitShop.storage.put("Apple", 10);
     }
 
     @Test
-    public void supplyUnknownFruit() {
+    public void supplyUnknownFruit_addsToStorage() {
         FruitTransaction transaction = new FruitTransaction(FruitTransaction
                 .Operation.SUPPLY, "Coconut", 3);
         operationHandler.process(transaction);
@@ -26,11 +27,16 @@ public class SupplyOperationTest {
     }
 
     @Test
-    public void supplyExitingFruit() {
+    public void supplyExitingFruit_increasesStock() {
         FruitTransaction transaction = new FruitTransaction(FruitTransaction
                 .Operation.SUPPLY, "Apple", 3);
         operationHandler.process(transaction);
         int actual = FruitShop.storage.get("Apple");
         assertEquals(13, actual);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        FruitShop.storage.clear();
     }
 }

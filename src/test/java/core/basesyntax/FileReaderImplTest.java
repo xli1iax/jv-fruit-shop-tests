@@ -4,25 +4,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import core.basesyntax.reader.FileReader;
 import core.basesyntax.reader.FileReaderImpl;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class FileReaderImplTest {
-    @Test
-    public void readFileIncorrectPath() {
-        FileReaderImpl fileReaderImpl = new FileReaderImpl();
-        assertThrows(RuntimeException.class,
-                () -> fileReaderImpl.read("/invalid-path/does-not-exist/report.txt"));
+    private FileReaderImpl fileReader;
+
+    @BeforeEach
+    public void setUp() {
+        fileReader = new FileReaderImpl();
     }
 
     @Test
-    public void readValidFileSkipsHeaderAndReadsLines() throws IOException {
-        FileReader fileReader = new FileReaderImpl();
+    public void readFileIncorrectPath_throwsException() {
+        assertThrows(RuntimeException.class,
+                () -> fileReader.read("/invalid-path/does-not-exist/report.txt"));
+    }
+
+    @Test
+    public void readValidFileSkipsHeaderAndReadsLines_Ok() throws IOException {
         Path tempFile = Files.createTempFile("testData", ".csv");
 
         List<String> lines = List.of(
@@ -38,8 +43,7 @@ public class FileReaderImplTest {
     }
 
     @Test
-    public void readFileOnlyWithHeaderReturnsEmptyList() throws IOException {
-        FileReader fileReader = new FileReaderImpl();
+    public void readFileOnlyWithHeader_returnsEmptyList() throws IOException {
         Path tempFile = Files.createTempFile("testData", ".csv");
 
         Files.write(tempFile, List.of("fruit,quantity"));

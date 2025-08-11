@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import core.basesyntax.report.ReportGeneratorImpl;
 import core.basesyntax.storage.FruitShop;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,6 @@ public class ReportGeneratorImplTest {
 
     @BeforeEach
     void setUp() {
-        FruitShop.storage.clear();
         reportGenerator = new ReportGeneratorImpl();
     }
 
@@ -24,7 +24,7 @@ public class ReportGeneratorImplTest {
     }
 
     @Test
-    void getReportStorageWithFruits() {
+    void getReportStorageWithFruits_returnsHeaderAndData() {
         FruitShop.storage.put("Apple", 10);
         FruitShop.storage.put("Banana", 5);
 
@@ -35,5 +35,10 @@ public class ReportGeneratorImplTest {
         assertTrue(report.contains("Banana,5"));
 
         assertTrue(report.endsWith(System.lineSeparator()));
+    }
+
+    @AfterEach
+    void tearDown() {
+        FruitShop.storage.clear();
     }
 }

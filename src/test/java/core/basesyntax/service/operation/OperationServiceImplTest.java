@@ -25,13 +25,13 @@ public class OperationServiceImplTest {
     }
 
     @Test
-    void getExistingOperation() {
+    void get_existingOperation_returnCorrectHandler() {
         assertEquals(purchaseHandler, operationStrategy.get(FruitTransaction.Operation.PURCHASE));
         assertEquals(supplyHandler, operationStrategy.get(FruitTransaction.Operation.SUPPLY));
     }
 
     @Test
-    void getNnExistingOperation() {
+    void get_nonExistingOperation_returnNull() {
         assertNull(operationStrategy.get(FruitTransaction.Operation.RETURN));
     }
 }
